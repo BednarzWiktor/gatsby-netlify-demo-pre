@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { graphql } from 'gatsby'
 import Layout from '../components/Layout'
@@ -6,6 +6,16 @@ import Content, { HTMLContent } from '../components/Content'
 
 export const AboutPageTemplate = ({ title, content, contentComponent }) => {
   const PageContent = contentComponent || Content
+  
+  const [ lambdaResult, setLambdaResult ] = useState('empty');
+
+  useEffect(() => {
+    const fetchLambda = async () => {
+      const response = await fetch('/.netlify/functions/hello');
+      return await response.json();
+    }
+    setLambdaResult(fetchLambda());
+  });
 
   return (
     <section className="section section--gradient">
@@ -16,6 +26,7 @@ export const AboutPageTemplate = ({ title, content, contentComponent }) => {
               <h2 className="title is-size-3 has-text-weight-bold is-bold-light">
                 {title}
               </h2>
+              <h3>{`my lambda result: ${lambdaResult}`}</h3>
               <PageContent className="content" content={content} />
             </div>
           </div>
