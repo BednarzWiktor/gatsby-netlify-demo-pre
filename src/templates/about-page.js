@@ -12,10 +12,12 @@ export const AboutPageTemplate = ({ title, content, contentComponent }) => {
   useEffect(() => {
     const fetchLambda = async () => {
       const response = await fetch('/.netlify/functions/hello');
-      return await response.json();
+      const { msg } = await response.json();
+
+      setLambdaResult(msg);
     }
-    setLambdaResult(fetchLambda());
-  });
+    fetchLambda();
+  }, []);
 
   return (
     <section className="section section--gradient">
